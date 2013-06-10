@@ -31,8 +31,37 @@ $email_body = "You have received a new contact form submission\n".
 $to ="eileen@eileenflynnconsulting.com";
 $headers = "From: $email_from \r\n";
 $headers .= "Reply-To: $visitor_email \r\n";
-mail($to,$email_subject,$email_body,$headers);                            
 
+
+$isValid = 1;
+$msg = "The form submission has the following issues: <br />";
+
+if(trim($fname, " ")==""){
+	$isValid = 0;
+	$msg .= "-First name must not be blank<br />";
+
+}
+if(trim($lname, " ")==""){
+	$isValid=0;
+	$msg .= "-Last name must not be blank <br />";
+}
+if(trim($visitor_email, " ")==""){
+	$isValid=0;
+	$msg .= "-Email must not be blank <br />";
+}
+if(trim($phone, " ")==""){
+	$isValid=0;
+	$msg .= "-Phone must not be blank <br />";
+}
+if(trim($message, " ")=="" || $message="Please describe your presenting problem."){
+	$isValid=0;
+	$msg .= "-Message must not be blank <br />";
+}
+
+if($isValid==1){
+	$msg = "Thank you for your submission!";
+	mail($to,$email_subject,$email_body,$headers);                            
+}
 
 ?>
 
@@ -67,9 +96,17 @@ mail($to,$email_subject,$email_body,$headers);
 		<!-- Begin Left Column -->
 		<div id="column_l">
 			<!-- #BeginEditable "content" -->
-			<center><h2>Thank you for your submission!</h2></center>
+
+			<?php
+
+				if($isValid==1){ ?>
+					<center><h2>Thank you for your submission!</h2></center>
 			
-			<center><p>We will respond as soon as possible and look forward to hearing from you again.</p></center>
+					<center><p>We will respond as soon as possible and look forward to hearing from you again.</p></center>
+				<?php } else{ 
+					echo "<center><p>".$msg."</p></center>";
+					} ?>
+			
 			<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 			<!-- #EndEditable -->
 		</div>
